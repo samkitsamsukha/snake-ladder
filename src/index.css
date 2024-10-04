@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .board{
-    background-image: url(boardpicture.jpg);
+    background-image: url(1.png);
     background-size: 100%;
 }
 

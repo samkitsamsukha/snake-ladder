@@ -8,9 +8,9 @@ const GameFrame = () => {
     var no = 100, inc = -1;
     for(let i = 0; i<10; i++){
       for(let j = 0; j<10; j++){
-        let y = i*50;
-        let x = j*50;
-        boxes+=`<div id="b_${no}" class='boX w-[48px] h-[48px]  absolute ' style="margin: ${y}px ${x}px"></div>`;
+        let y = i*60;
+        let x = j*60;
+        boxes+=`<div id="b_${no}" class='box w-[60px] h-[60px]  absolute ' style="margin: ${y}px ${x}px"></div>`;
         no = no + inc;
       }
       if(i%2 === 0){
@@ -25,7 +25,7 @@ const GameFrame = () => {
   }
 
   function setBox(id){
-    document.getElementById(id).innerHTML = `<div class='circle w-full h-full bg-green-500 border-4 border-white scale-[0.6] rounded-full'></div>`
+    document.getElementById(id).innerHTML = `<div class='circle w-full h-full bg-blue-800 border-4 border-white scale-[0.6] rounded-full'></div>`
   }
 
   function removeBox(id){
@@ -55,8 +55,8 @@ const GameFrame = () => {
     }
   }
 
-  var ladders = [[3, 20], [6, 14], [11, 28], [15, 34], [17, 74], [22, 37], [38, 59], [49, 67], [57, 76], [61, 78], [73, 86], [81, 98], [88, 91]];
-  var snakes = [[8, 4], [18, 1], [26, 10], [39, 5], [51, 6], [54, 36], [56, 1], [60, 23], [75, 28], [83, 45], [85, 59], [90, 48], [92, 25], [97, 87], [99, 63]];
+  var ladders = [[5, 26], [10, 31], [12, 33], [23, 42], [34, 57], [49, 71], [53, 86], [60, 79], [73, 92], [77, 96]];
+  var snakes = [[97, 42], [95, 47], [91, 69], [82, 57], [65, 33], [48, 29], [43, 36], [39, 20], [25, 3], [27, 13]];
 
   function rotateDice(){
     let dv = parseInt(Math.random()*6)+1;
@@ -74,7 +74,7 @@ const GameFrame = () => {
   }
 
   function checkLadder(){
-    for(let i = 0; i<12; i++){
+    for(let i = 0; i<10; i++){
       if(ladders[i][0]===pos){
         setTimeout(()=>{
           console.log("matched", pos);
@@ -89,7 +89,7 @@ const GameFrame = () => {
   }
 
   function checkSnake(){
-    for(let i = 0; i<15; i++){
+    for(let i = 0; i<10; i++){
       if(snakes[i][0]===pos){
         setTimeout(()=>{
           console.log('matched', pos);
@@ -104,11 +104,11 @@ const GameFrame = () => {
   }
 
   return (
-    <div className='w-[600px] h-[650px] shadow-lg shadow-orange-900 bg-white p-[10px]'>
-      <div className='board w-[500px] h-[500px] border border-black mx-[50px] mt-[10px]'>
+    <div className='p-10 shadow-lg bg-white flex flex-col space-y-4 justify-center items-center'>
+      <div className='board w-[600px] h-[600px] shadow-md'>
         
       </div>
-      <div className='dicef w-[500px] h-[80px] mx-[50px] mt-[10px] absolute'>
+      <div className='dicef flex flex-col justify-center items-center pt-4 space-y-4'>
         <div className="dice w-[60px] h-[60px]">
           <div className="top w-full h-full absolute rounded-md">
             <div className="dot m-[3%] w-[10px] h-[10px] bg-white rounded-full"></div>
@@ -144,7 +144,7 @@ const GameFrame = () => {
             <div className="dot m-[3%] w-[10px] h-[10px] bg-white rounded-full"></div>
           </div>
         </div>
-        <div className='flex justify-center items-center mt-[5px]'>
+        <div className='flex justify-center items-center'>
         <button onClick={rotateDice} className='bg-indigo-950 text-white font-semibold rounded-md px-2 py-1'>Rotate Dice</button>
         </div>
       </div>
