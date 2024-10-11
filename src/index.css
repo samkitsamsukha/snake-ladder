@@ -24,33 +24,62 @@
     padding: 10px;
 }
 
-.front{
-    transform: translateZ(30px);
+/* Default translation for smaller devices */
+.front {
+    transform: translateZ(20px);
 }
 
-.back{
-    transform: translateZ(-30px);
+.back {
+    transform: translateZ(-20px);
 }
 
-.left{
+.left {
     transform-origin: left;
-    transform: rotateY(90deg) translateX(-30px);
+    transform: rotateY(90deg) translateX(-20px);
 }
 
-.right{
+.right {
     transform-origin: right;
-    transform: rotateY(90deg) translateX(30px);
+    transform: rotateY(90deg) translateX(20px);
 }
 
-.top{
+.top {
     transform-origin: center;
-    transform: rotateX(90deg) translateZ(30px);
+    transform: rotateX(90deg) translateZ(20px);
 }
 
-.bottom{
+.bottom {
     transform-origin: center;
-    transform: rotateX(90deg) translateZ(-30px);
+    transform: rotateX(90deg) translateZ(-20px);
 }
+
+/* For medium devices and up */
+@media (min-width: 768px) {
+    .front {
+        transform: translateZ(30px);
+    }
+
+    .back {
+        transform: translateZ(-30px);
+    }
+
+    .left {
+        transform: rotateY(90deg) translateX(-30px);
+    }
+
+    .right {
+        transform: rotateY(90deg) translateX(30px);
+    }
+
+    .top {
+        transform: rotateX(90deg) translateZ(30px);
+    }
+
+    .bottom {
+        transform: rotateX(90deg) translateZ(-30px);
+    }
+}
+    
 
 .right .dot{
     margin: 5%;
