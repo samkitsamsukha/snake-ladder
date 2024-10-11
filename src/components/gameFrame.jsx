@@ -5,13 +5,52 @@ const GameFrame = () => {
   const [quizVisible, setQuizVisible] = useState(false);
   const [currentQuizType, setCurrentQuizType] = useState(null); // ladder or snake
   const [quizPosition, setQuizPosition] = useState(null);
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(null); // Added state for selected option
 
   const ladders = [[5, 26], [10, 31], [12, 33], [23, 42], [34, 57], [49, 71], [53, 86], [60, 79], [73, 92], [77, 96]];
   const snakes = [[97, 42], [95, 47], [91, 69], [82, 57], [65, 33], [48, 29], [43, 36], [39, 20], [25, 3], [27, 13]];
 
+  const quizQuestions = [
+    {
+      question: "What is the capital of France?",
+      options: ["Berlin", "Madrid", "Paris", "Rome"],
+      correct: 2,
+    },
+    {
+      question: "Who wrote 'To Kill a Mockingbird'?",
+      options: ["Harper Lee", "J.K. Rowling", "Ernest Hemingway", "Mark Twain"],
+      correct: 0,
+    },
+    // Add more questions here...
+    {
+      question: "Which planet is known as the Red Planet?",
+      options: ["Earth", "Mars", "Venus", "Jupiter"],
+      correct: 1,
+    },
+    {
+      question: "Who painted the Mona Lisa?",
+      options: ["Vincent Van Gogh", "Leonardo da Vinci", "Pablo Picasso", "Claude Monet"],
+      correct: 1,
+    },
+    {
+      question: "What is the square root of 144?",
+      options: ["10", "11", "12", "13"],
+      correct: 2,
+    },
+    // Add up to 20 questions as required
+  ];
+
   useEffect(() => {
     createBoxes();
   }, []);
+
+  useEffect(() => {
+    if (quizPosition !== null) {
+      // After position is updated, set the player's new box
+      setBox(`b_${pos}`);
+    }
+  }, [pos, quizPosition]);
 
   function createBoxes() {
     var boxes = '';
@@ -65,9 +104,9 @@ const GameFrame = () => {
     let dv = Math.floor(Math.random() * 6) + 1;
     console.log(dv);
     let LIST = [[0, 0, 0], [-90, 0, 0], [0, 90, 0], [0, -90, 0], [90, 0, 0], [180, 0, 0]];
-    let x = LIST[dv-1][0];
-    let y = LIST[dv-1][1];
-    let z = LIST[dv-1][2];
+    let x = LIST[dv - 1][0];
+    let y = LIST[dv - 1][1];
+    let z = LIST[dv - 1][2];
     document.querySelector(".dice").classList.add('anm');
     setTimeout(() => {
       document.querySelector(".dice").style.transform = `rotateX(${x}deg) rotateY(${y}deg) rotateZ(${z}deg)`;
@@ -84,6 +123,7 @@ const GameFrame = () => {
         setQuizPosition(end);
         setCurrentQuizType('ladder');
         setQuizVisible(true);
+        selectRandomQuestion();
       }
     });
   }
@@ -94,23 +134,34 @@ const GameFrame = () => {
         setQuizPosition(end);
         setCurrentQuizType('snake');
         setQuizVisible(true);
+        selectRandomQuestion();
       }
     });
   }
 
-  function handleQuizSubmit(correct) {
+  function selectRandomQuestion() {
+    const randomIndex = Math.floor(Math.random() * quizQuestions.length);
+    setSelectedQuestion(quizQuestions[randomIndex]);
+  }
+
+  function handleQuizSubmit() {
     setQuizVisible(false);
-    if (correct && currentQuizType === 'ladder') {
+    
+    if (currentQuizType === 'ladder' && selectedOption === selectedQuestion.correct) {
+      console.log(`Climbing the ladder from ${pos} to ${quizPosition}`);
       removeBox(`b_${pos}`);
-      setPos(quizPosition);
-      setBox(`b_${quizPosition}`);
-    } else if (!correct && currentQuizType === 'snake') {
+      setPos(quizPosition); // Move player to the top of the ladder
+    } else if (currentQuizType === 'snake' && selectedOption !== selectedQuestion.correct) {
+      console.log(`Bitten by snake! Moving from ${pos} to ${quizPosition}`);
       removeBox(`b_${pos}`);
-      setPos(quizPosition);
-      setBox(`b_${quizPosition}`);
+      setPos(quizPosition); // Move player to the bottom of the snake
     } else {
-      playerMover(1); 
+      console.log('No movement for the ladder or correct snake answer');
+      playerMover(1); // Move forward 1 step as a fallback
     }
+    
+    // Clear selected option after submission
+    setSelectedOption(null);
   }
 
   return (
@@ -137,49 +188,46 @@ const GameFrame = () => {
           <div className="right w-full h-full absolute rounded-md">
             <div className="dot m-[3%] w-[10px] h-[10px] bg-white rounded-full"></div>
             <div className="dot m-[3%] w-[10px] h-[10px] bg-white rounded-full"></div>
-            <div className="dot m-[3%] w-[10px] h-[10px] bg-white rounded-full"></div>
-            <div className="dot m-[3%] w-[10px] h-[10px] bg-white rounded-full"></div>
           </div>
           <div className="front w-full h-full absolute rounded-md">
+            <div className="dot m-[3%] w-[10px] h-[10px] bg-white rounded-full"></div>
+            <div className="dot m-[3%] w-[10px] h-[10px] bg-white rounded-full"></div>
             <div className="dot m-[3%] w-[10px] h-[10px] bg-white rounded-full"></div>
           </div>
           <div className="back w-full h-full absolute rounded-md">
             <div className="dot m-[3%] w-[10px] h-[10px] bg-white rounded-full"></div>
             <div className="dot m-[3%] w-[10px] h-[10px] bg-white rounded-full"></div>
-            <div className="dot m-[3%] w-[10px] h-[10px] bg-white rounded-full"></div>
-            <div className="dot m-[3%] w-[10px] h-[10px] bg-white rounded-full"></div>
-            <div className="dot m-[3%] w-[10px] h-[10px] bg-white rounded-full"></div>
           </div>
         </div>
-        <button onClick={rotateDice} className='bg-indigo-950 text-white font-semibold rounded-md px-2 py-1'>Rotate Dice</button>
+        <button onClick={rotateDice} className='bg-blue-600 hover:bg-blue-800 text-white px-4 py-2 rounded'>
+          Roll Dice
+        </button>
       </div>
+
       {quizVisible && (
-        <PopQuiz handleSubmit={handleQuizSubmit} />
+        <div className='quizModal'>
+          <h2 className='text-lg font-semibold'>{selectedQuestion.question}</h2>
+          <div>
+            {selectedQuestion.options.map((option, index) => (
+              <div key={index}>
+                <input
+                  type='radio'
+                  id={`option-${index}`}
+                  name='quiz-option'
+                  value={index}
+                  onChange={(e) => setSelectedOption(Number(e.target.value))} // Set selected option
+                />
+                <label htmlFor={`option-${index}`}>{option}</label>
+              </div>
+            ))}
+          </div>
+          <button onClick={handleQuizSubmit} className='bg-green-600 hover:bg-green-800 text-white px-4 py-2 rounded'>
+            Submit
+          </button>
+        </div>
       )}
     </div>
   );
-};
+}
 
-const PopQuiz = ({ handleSubmit }) => {
-  const [answer, setAnswer] = useState('');
-
-  const checkAnswer = () => {
-    const correct = answer.toLowerCase() === 'correct answer'; // Replace with actual logic
-    handleSubmit(correct);
-  };
-
-  return (
-    <div className='quiz-modal bg-white p-4 shadow-lg rounded-lg'>
-      <p className='font-bold'>Quiz Question: What is 2 + 2?</p>
-      <input
-        type='text'
-        value={answer}
-        onChange={(e) => setAnswer(e.target.value)}
-        className='border-2 p-1'
-      />
-      <button onClick={checkAnswer} className='bg-green-500 text-white rounded-md px-2 py-1'>Submit Answer</button>
-    </div>
-  );
-};
-
-export default GameFrame;
+export default GameFrame; 
