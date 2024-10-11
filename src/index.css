@@ -26,36 +26,30 @@
 
 .front{
     transform: translateZ(30px);
-    background: rgb(6, 10, 58); 
 }
 
 .back{
     transform: translateZ(-30px);
-    background: rgb(6, 10, 58);
 }
 
 .left{
     transform-origin: left;
     transform: rotateY(90deg) translateX(-30px);
-    background: rgb(6, 10, 58);
 }
 
 .right{
     transform-origin: right;
     transform: rotateY(90deg) translateX(30px);
-    background: rgb(6, 10, 58);
 }
 
 .top{
     transform-origin: center;
     transform: rotateX(90deg) translateZ(30px);
-    background: rgb(6, 10, 58);
 }
 
 .bottom{
     transform-origin: center;
     transform: rotateX(90deg) translateZ(-30px);
-    background: rgb(6, 10, 58);
 }
 
 .right .dot{
