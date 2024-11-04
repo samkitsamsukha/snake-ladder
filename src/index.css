@@ -104,3 +104,10 @@
         transform: rotateX(60deg) rotateY(120deg) rotateZ(120deg);
     }
 }
+
+.quiz-modal {
+    transition: opacity 2s ease;
+}
+.fade-out {
+    opacity: 0;
+}
