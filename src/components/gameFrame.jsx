@@ -257,7 +257,7 @@ const GameFrame = () => {
 					return newPos;
 				});
 				playerMover(move - 1);
-			}, 500);
+			}, 400);
 		}
 	}
 
