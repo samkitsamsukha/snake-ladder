@@ -262,8 +262,8 @@ const GameFrame = () => {
 	}
 
 	function rotateDice() {
-		// let dv = Math.floor(Math.random() * 6) + 1;
-		let dv = 3;
+		let dv = Math.floor(Math.random() * 6) + 1;
+		// let dv = 3;
 		console.log(dv);
 		let LIST = [
 			[0, 0, 0],
@@ -323,7 +323,7 @@ const GameFrame = () => {
 		const isCorrect = selectedOption === selectedQuestion.correct;
 
 		// Set feedback message based on correctness
-		const feedbackMsg = isCorrect ? "Correct answer!" : "Wrong answer!";
+		const feedbackMsg = isCorrect ? "Correct Answer!" : "Wrong Answer!";
 		const feedbackAct =
 			currentQuizType === "snake"
 				? isCorrect
@@ -334,7 +334,8 @@ const GameFrame = () => {
 				: " The ladder won't take you up";
 
 		// Combine feedback message and action
-		setFeedbackMessage(feedbackMsg + feedbackAct);
+		setFeedbackMessage(feedbackMsg);
+		setFeedbackAction(feedbackAct);
 
 		// Show feedback
 		setShowFeedback(true);
@@ -345,7 +346,7 @@ const GameFrame = () => {
 			setShowFeedback(false);
 			setFeedbackMessage(""); // Reset feedback message for the next question
 			setSelectedOption(null); // Reset selected option for the next question
-		}, 2000);
+		}, 1500);
 
 		// Your existing game logic
 		if (currentQuizType === "ladder" && isCorrect) {
@@ -412,22 +413,22 @@ const GameFrame = () => {
 
 			{/* Quiz Modal */}
 			{quizVisible && (
-				<div className="quiz-modal fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
-					<div className="quiz-content bg-white p-4 rounded-lg shadow-lg max-w-sm w-full">
-						<h2 className="text-xl font-bold mb-2">
+				<div className="quiz-modal fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-0">
+					<div className="quiz-content  bg-white p-2 rounded-lg shadow-lg max-w-sm w-full">
+						<div className="font-bold mb-1 text-center">
 							{selectedQuestion?.question}
-						</h2>
-						<div className="options space-y-2">
+						</div>
+						<div className="options space-y-1">
 							{selectedQuestion?.options.map((option, index) => (
 								<button
 									key={index}
 									onClick={() => setSelectedOption(index)}
-									className={`w-full p-2 rounded ${
+									className={`w-full p-1 rounded text-sm ${
 										selectedOption === index
 											? index === selectedQuestion.correct
 												? "bg-green-500 text-white"
 												: "bg-red-500 text-white"
-											: "bg-gray-200"
+											: "bg-gray-100"
 									}`}
 								>
 									{option}
@@ -436,7 +437,8 @@ const GameFrame = () => {
 						</div>
 						{showFeedback && (
 							<p className="feedback-message text-center mt-4">
-								{feedbackMessage}
+								<span className={`${feedbackMessage === "Correct Answer!" ? "text-green-700" : "text-red-700"} font-bold`}>{feedbackMessage}</span>
+								<span>{feedbackAction}</span>
 							</p>
 						)}
 					</div>
