@@ -7,12 +7,9 @@ const GameFrame = () => {
 	const [quizPosition, setQuizPosition] = useState(null);
 	const [selectedQuestion, setSelectedQuestion] = useState(null);
 	const [selectedOption, setSelectedOption] = useState(null); // Added state for selected option
-	const [toast, setToast] = useState({
-		visible: false,
-		message: "",
-		type: "",
-		justification: "",
-	}); // Added toast state
+	const [showFeedback, setShowFeedback] = useState(false);
+	const [feedbackMessage, setFeedbackMessage] = useState(""); // State for feedback messag
+	const [feedbackAction, setFeedbackAction] = useState("");
 
 	const ladders = [
 		[5, 26],
@@ -56,11 +53,17 @@ const GameFrame = () => {
 			question: "Which planet is known as the Red Planet?",
 			options: ["Earth", "Mars", "Venus", "Jupiter"],
 			correct: 1,
-			justification: "Mars is often called the Red Planet due to its reddish appearance.",
+			justification:
+				"Mars is often called the Red Planet due to its reddish appearance.",
 		},
 		{
 			question: "Who painted the Mona Lisa?",
-			options: ["Vincent Van Gogh", "Leonardo da Vinci", "Pablo Picasso", "Claude Monet"],
+			options: [
+				"Vincent Van Gogh",
+				"Leonardo da Vinci",
+				"Pablo Picasso",
+				"Claude Monet",
+			],
 			correct: 1,
 			justification: "Leonardo da Vinci painted the Mona Lisa.",
 		},
@@ -72,7 +75,12 @@ const GameFrame = () => {
 		},
 		{
 			question: "What is the largest ocean on Earth?",
-			options: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
+			options: [
+				"Atlantic Ocean",
+				"Indian Ocean",
+				"Arctic Ocean",
+				"Pacific Ocean",
+			],
 			correct: 3,
 			justification: "The Pacific Ocean is the largest ocean on Earth.",
 		},
@@ -84,7 +92,12 @@ const GameFrame = () => {
 		},
 		{
 			question: "Who discovered penicillin?",
-			options: ["Marie Curie", "Alexander Fleming", "Isaac Newton", "Albert Einstein"],
+			options: [
+				"Marie Curie",
+				"Alexander Fleming",
+				"Isaac Newton",
+				"Albert Einstein",
+			],
 			correct: 1,
 			justification: "Alexander Fleming discovered penicillin in 1928.",
 		},
@@ -98,7 +111,8 @@ const GameFrame = () => {
 			question: "What is the longest river in the world?",
 			options: ["Amazon", "Nile", "Yangtze", "Mississippi"],
 			correct: 1,
-			justification: "The Nile is traditionally considered the longest river in the world.",
+			justification:
+				"The Nile is traditionally considered the longest river in the world.",
 		},
 		{
 			question: "What is the chemical symbol for gold?",
@@ -108,9 +122,15 @@ const GameFrame = () => {
 		},
 		{
 			question: "Who invented the telephone?",
-			options: ["Thomas Edison", "Nikola Tesla", "Alexander Graham Bell", "Guglielmo Marconi"],
+			options: [
+				"Thomas Edison",
+				"Nikola Tesla",
+				"Alexander Graham Bell",
+				"Guglielmo Marconi",
+			],
 			correct: 2,
-			justification: "Alexander Graham Bell is credited with inventing the first practical telephone.",
+			justification:
+				"Alexander Graham Bell is credited with inventing the first practical telephone.",
 		},
 		{
 			question: "In which continent is the Sahara Desert located?",
@@ -126,7 +146,12 @@ const GameFrame = () => {
 		},
 		{
 			question: "Who is known as the 'Father of Computers'?",
-			options: ["Alan Turing", "Charles Babbage", "John von Neumann", "Steve Jobs"],
+			options: [
+				"Alan Turing",
+				"Charles Babbage",
+				"John von Neumann",
+				"Steve Jobs",
+			],
 			correct: 1,
 			justification: "Charles Babbage is considered the 'Father of Computers'.",
 		},
@@ -140,7 +165,8 @@ const GameFrame = () => {
 			question: "Which country hosted the 2016 Summer Olympics?",
 			options: ["China", "Brazil", "Russia", "United Kingdom"],
 			correct: 1,
-			justification: "Brazil hosted the 2016 Summer Olympics in Rio de Janeiro.",
+			justification:
+				"Brazil hosted the 2016 Summer Olympics in Rio de Janeiro.",
 		},
 		{
 			question: "What is the largest planet in our Solar System?",
@@ -150,7 +176,12 @@ const GameFrame = () => {
 		},
 		{
 			question: "Who wrote 'Pride and Prejudice'?",
-			options: ["Jane Austen", "Emily Brontë", "Charles Dickens", "Virginia Woolf"],
+			options: [
+				"Jane Austen",
+				"Emily Brontë",
+				"Charles Dickens",
+				"Virginia Woolf",
+			],
 			correct: 0,
 			justification: "'Pride and Prejudice' was written by Jane Austen.",
 		},
@@ -160,7 +191,13 @@ const GameFrame = () => {
 			correct: 1,
 			justification: "Tokyo is the capital city of Japan.",
 		},
-	];	
+	];
+
+	useEffect(() => {
+		if (selectedOption !== null) {
+			handleQuizSubmit();
+		}
+	}, [selectedOption]);
 
 	useEffect(() => {
 		createBoxes();
@@ -172,8 +209,6 @@ const GameFrame = () => {
 			setBox(`b_${pos}`);
 		}
 	}, [pos, quizPosition]);
-
-	
 
 	function createBoxes() {
 		let boxes = "";
@@ -227,8 +262,8 @@ const GameFrame = () => {
 	}
 
 	function rotateDice() {
-		let dv = Math.floor(Math.random() * 6) + 1;
-		// let dv = 3;
+		// let dv = Math.floor(Math.random() * 6) + 1;
+		let dv = 3;
 		console.log(dv);
 		let LIST = [
 			[0, 0, 0],
@@ -256,6 +291,7 @@ const GameFrame = () => {
 	function checkLadder(currentPos) {
 		ladders.forEach(([start, end]) => {
 			if (currentPos === start) {
+				console.log(`Ladder quiz triggered at ${start}`);
 				setQuizPosition(end);
 				setCurrentQuizType("ladder");
 				setQuizVisible(true);
@@ -267,6 +303,7 @@ const GameFrame = () => {
 	function checkSnake(currentPos) {
 		snakes.forEach(([start, end]) => {
 			if (currentPos === start) {
+				console.log(`Snake quiz triggered at ${start}`);
 				setQuizPosition(end);
 				setCurrentQuizType("snake");
 				setQuizVisible(true);
@@ -280,55 +317,49 @@ const GameFrame = () => {
 		setSelectedQuestion(quizQuestions[randomIndex]);
 	}
 
-	function handleQuizSubmit() {
-		if (selectedOption === null) return; // Ensure an option is selected
+	const handleQuizSubmit = () => {
+		if (selectedOption === null) return;
 
 		const isCorrect = selectedOption === selectedQuestion.correct;
-		const message = isCorrect
-			? currentQuizType === "ladder"
-				? "Correct Answer! The ladder will take you up."
-				: "Correct Answer! The snake won't bite you."
-			: currentQuizType === "ladder"
-			? "Wrong Answer! The ladder won't take you up."
-			: "Wrong Answer! The snake will bite you.";
-		const justification = selectedQuestion.justification
-			? selectedQuestion.justification
-			: isCorrect
-			? "Great job!"
-			: "Better luck next time!";
 
-		// Show toast with appropriate message and justification
-		setToast({
-			visible: true,
-			message,
-			type: isCorrect ? "success" : "error",
-			justification,
-		});
+		// Set feedback message based on correctness
+		const feedbackMsg = isCorrect ? "Correct answer!" : "Wrong answer!";
+		const feedbackAct =
+			currentQuizType === "snake"
+				? isCorrect
+					? " The snake won't bite you"
+					: " The snake will bite you"
+				: isCorrect
+				? " The ladder takes you up"
+				: " The ladder won't take you up";
 
-		setQuizVisible(false);
-	}
+		// Combine feedback message and action
+		setFeedbackMessage(feedbackMsg + feedbackAct);
 
-	// New function to handle 'OK' button click in the toast
-	function handleToastOk() {
-		const isCorrect = toast.type === "success";
-		setToast({ visible: false, message: "", type: "", justification: "" });
+		// Show feedback
+		setShowFeedback(true);
 
+		// Automatically close the modal after 2 seconds
+		setTimeout(() => {
+			setQuizVisible(false);
+			setShowFeedback(false);
+			setFeedbackMessage(""); // Reset feedback message for the next question
+			setSelectedOption(null); // Reset selected option for the next question
+		}, 2000);
+
+		// Your existing game logic
 		if (currentQuizType === "ladder" && isCorrect) {
 			console.log(`Climbing the ladder from ${pos} to ${quizPosition}`);
 			removeBox(`b_${pos}`);
-			setPos(quizPosition); // Move player to the top of the ladder
+			setPos(quizPosition);
 		} else if (currentQuizType === "snake" && !isCorrect) {
 			console.log(`Bitten by snake! Moving from ${pos} to ${quizPosition}`);
 			removeBox(`b_${pos}`);
-			setPos(quizPosition); // Move player to the bottom of the snake
+			setPos(quizPosition);
 		} else {
 			console.log("No movement for the ladder or correct snake answer");
-			// Optionally perform other actions, e.g., move forward 1 step
 		}
-
-		// Clear selected option after submission
-		setSelectedOption(null);
-	}
+	};
 
 	return (
 		<div className="bg-white p-2 relative">
@@ -380,66 +411,34 @@ const GameFrame = () => {
 			</div>
 
 			{/* Quiz Modal */}
-			{quizVisible && selectedQuestion && (
-				<div className="fixed inset-0 z-20 flex items-center justify-center">
-					{/* Overlay with opacity */}
-					{/* <div className="absolute inset-0 bg-black bg-opacity-75"></div> */}
-
-					{/* Modal */}
-					<div className="quizModal bg-white flex items-center justify-center flex-col p-4 rounded-md relative z-30 shadow-lg transition transform duration-300 ease-in-out">
-						<h2 className="text-lg font-semibold pb-2">
-							{selectedQuestion.question}
+			{quizVisible && (
+				<div className="quiz-modal fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
+					<div className="quiz-content bg-white p-4 rounded-lg shadow-lg max-w-sm w-full">
+						<h2 className="text-xl font-bold mb-2">
+							{selectedQuestion?.question}
 						</h2>
-						<div className="grid grid-cols-2 p-2 gap-2 pb-4">
-							{selectedQuestion.options.map((option, index) => (
-								<div key={index} className="flex flex-row space-x-1">
-									<input
-										type="radio"
-										required
-										id={`option-${index}`}
-										name="quiz-option"
-										value={index}
-										onChange={(e) => setSelectedOption(Number(e.target.value))} // Set selected option
-									/>
-									<label htmlFor={`option-${index}`}>{option}</label>
-								</div>
+						<div className="options space-y-2">
+							{selectedQuestion?.options.map((option, index) => (
+								<button
+									key={index}
+									onClick={() => setSelectedOption(index)}
+									className={`w-full p-2 rounded ${
+										selectedOption === index
+											? index === selectedQuestion.correct
+												? "bg-green-500 text-white"
+												: "bg-red-500 text-white"
+											: "bg-gray-200"
+									}`}
+								>
+									{option}
+								</button>
 							))}
 						</div>
-						<button
-							onClick={handleQuizSubmit}
-							disabled={selectedOption === null} // Disable if no option selected
-							className={`transition duration-300 delay-75 px-2 py-1 rounded-md text-white 
-                ${
-									selectedOption !== null
-										? "bg-green-600 hover:bg-green-700"
-										: "bg-gray-400 cursor-not-allowed"
-								}`}
-						>
-							Submit
-						</button>
-					</div>
-				</div>
-			)}
-
-			{/* Toast Notification */}
-			{toast.visible && (
-				<div className="fixed inset-0 flex items-center justify-center z-40 shadow-lg shadow-gray-800">
-					<div
-						className={`${
-							toast.type === "success" ? "bg-green-600" : "bg-red-500"
-						} text-white p-4 rounded-md shadow-lg transform transition-all duration-300 ease-in-out opacity-100 max-w-sm mx-auto`}
-					>
-						<h3 className="text-lg font-semibold">{toast.message}</h3>
-						<p className="mt-2">{toast.justification}</p>
-						{/* Added 'OK' button */}
-						<div className="flex justify-center items-center">
-							<button
-								onClick={handleToastOk}
-								className="mt-4 bg-white text-black px-2 w-12 py-1 rounded-md hover:bg-gray-200 transition duration-300 flex items-center justify-center"
-							>
-								<div>Ok</div>
-							</button>
-						</div>
+						{showFeedback && (
+							<p className="feedback-message text-center mt-4">
+								{feedbackMessage}
+							</p>
+						)}
 					</div>
 				</div>
 			)}
