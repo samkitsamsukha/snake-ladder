@@ -262,8 +262,8 @@ const GameFrame = () => {
 	}
 
 	function rotateDice() {
-		// let dv = Math.floor(Math.random() * 6) + 1;
-		let dv = 3;
+		let dv = Math.floor(Math.random() * 6) + 1;
+		// let dv = 3;
 		console.log(dv);
 		let LIST = [
 			[0, 0, 0],
