@@ -262,8 +262,8 @@ const GameFrame = () => {
 	}
 
 	function rotateDice() {
-		let dv = Math.floor(Math.random() * 6) + 1;
-		// let dv = 3;
+		// let dv = Math.floor(Math.random() * 6) + 1;
+		let dv = 3;
 		console.log(dv);
 		let LIST = [
 			[0, 0, 0],
@@ -317,6 +317,13 @@ const GameFrame = () => {
 		setSelectedQuestion(quizQuestions[randomIndex]);
 	}
 
+	function handleClose(){
+		setQuizVisible(false);
+		setShowFeedback(false);
+		setFeedbackMessage(""); // Reset feedback message for the next question
+		setSelectedOption(null); // Reset selected option for the next question
+	}
+
 	const handleQuizSubmit = () => {
 		if (selectedOption === null) return;
 
@@ -341,12 +348,12 @@ const GameFrame = () => {
 		setShowFeedback(true);
 
 		// Automatically close the modal after 2 seconds
-		setTimeout(() => {
-			setQuizVisible(false);
-			setShowFeedback(false);
-			setFeedbackMessage(""); // Reset feedback message for the next question
-			setSelectedOption(null); // Reset selected option for the next question
-		}, 1500);
+		// setTimeout(() => {
+		// 	setQuizVisible(false);
+		// 	setShowFeedback(false);
+		// 	setFeedbackMessage(""); // Reset feedback message for the next question
+		// 	setSelectedOption(null); // Reset selected option for the next question
+		// }, 6000);
 
 		// Your existing game logic
 		if (currentQuizType === "ladder" && isCorrect) {
@@ -436,10 +443,13 @@ const GameFrame = () => {
 							))}
 						</div>
 						{showFeedback && (
+							<div className="flex flex-col justify-center items-center space-y-2">
 							<p className="feedback-message text-center mt-4">
 								<span className={`${feedbackMessage === "Correct Answer!" ? "text-green-700" : "text-red-700"} font-bold`}>{feedbackMessage}</span>
 								<span>{feedbackAction}</span>
 							</p>
+							<button className="px-3 py-1 rounded-md bg-gray-300 hover:bg-gray-500 text-black text-sm duration-300" onClick={handleClose}>Ok</button>
+							</div>
 						)}
 					</div>
 				</div>
